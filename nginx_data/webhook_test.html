@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<style>
+body {
+  background-color: #ffaa80;
+}
+</style>
+	</head>
+    <title>Webhook Tester</title>
+    <body>
+	    <div class="mx-auto" style="width: 600px;">
+	    <form>
+           <div class="form-group">
+              <label for="exampleFormControlInput1">Webhook URL</label>
+              <input type="text" class="form-control" id="url" placeholder="http://localhost:9999/webhook/payload">
+           </div>
+           <div class="form-group">
+              <label for="exampleFormControlTextarea1">Payload</label>
+              <textarea class="form-control" id="payload" rows="10"></textarea>
+           </div>
+           <button type="submit" class="btn btn-primary">Send Data</button>
+      </form>
+      <p>
+          <br/>
+          <br/>
+          <label id="status"></label>
+      </p>
+
+      <p>
+      <img src="dataflow.png" alt="Data flow" width="500" height="200">
+      </p>
+
+      </div>
+
+      <script>
+            const formElement = document.querySelector('form');
+            formElement.addEventListener('submit',event => {
+                    event.preventDefault();
+                    let url = document.getElementById("url").value;
+                    let payload = document.getElementById("payload").value;
+                    
+                    if (url == "" || payload == "") {
+                        alert("please provide url and payload value");
+                    }
+                    fetch(url, {
+                        'method': 'POST',
+                        'body': payload
+		    }).then((response) => {
+                       let now = new Date().toLocaleString();
+                       if (response.ok) {
+			       let message = `${now} : Successful`;
+                           document.getElementById("status").innerHTML = message
+                       } else {
+			       let message = `${now} : ${response.status} ${response.statusText}`;
+                           document.getElementById("status").innerHTML = message
+                       }
+		    });
+            });
+      </script>
+    </body>
+</html>
